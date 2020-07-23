@@ -4,17 +4,18 @@
 
 resource "azurerm_virtual_machine" "ns" {
   name                  = "Netscaler-12.1-VPX"
-  location              = azurerm_resource_group.harbakshsingh.location
-  resource_group_name   = azurerm_resource_group.harbakshsingh.name
+  location              = azurerm_resource_group.citrixrg-paris.location
+  resource_group_name   = azurerm_resource_group.citrixrg-paris.name
   network_interface_ids = [azurerm_network_interface.ns-nic.id]
   vm_size               = "Standard_D4s_v3"
 
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
+#  boot_diagnostics {
+#    enabled     = true
+#    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+#  }
   os_profile {
     admin_username = "Nsroot"
+     admin_password = "Nsroot@12345678"
     computer_name  = "Netscaler-12.1-VPX"
   }
 
@@ -41,25 +42,27 @@ resource "azurerm_virtual_machine" "ns" {
   }
 }
 
+
+
 //resource "azurerm_managed_disk" "dc01backup" {
 //  name = "dc01-backup"
-//  resource_group_name = azurerm_resource_group.harbakshsingh.name
+//  resource_group_name = azurerm_resource_group.citrixrg.name
 //  create_option = ""
-//  location = azurerm_resource_group.harbakshsingh.location
+//  location = azurerm_resource_group.citrixrg.location
 //  storage_account_type = "StandardSSD_LRS"
 //}
 
 resource "azurerm_virtual_machine" "dc" {
   name                = "WIn2k19-DC01"
-  location            = azurerm_resource_group.harbakshsingh.location
-  resource_group_name = azurerm_resource_group.harbakshsingh.name
+  location            = azurerm_resource_group.citrixrg-neth.location
+  resource_group_name = azurerm_resource_group.citrixrg-neth.name
   network_interface_ids = [
   azurerm_network_interface.dc-nic.id]
   vm_size = "Standard_D4s_v3"
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
+ # boot_diagnostics {
+ #   enabled     = true
+ #   storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+ # }
   storage_os_disk {
     name              = "dcdisk1"
     caching           = "ReadWrite"
@@ -68,6 +71,7 @@ resource "azurerm_virtual_machine" "dc" {
   }
   os_profile {
     admin_username = "winadmin"
+    admin_password = "P@ssw0rd*123"
     computer_name  = "WIn2k19-DC01"
   }
   os_profile_windows_config {
@@ -83,17 +87,18 @@ resource "azurerm_virtual_machine" "dc" {
 }
 resource "azurerm_virtual_machine" "mi" {
   name                  = "Win2k19-MI"
-  location              = azurerm_resource_group.harbakshsingh.location
-  resource_group_name   = azurerm_resource_group.harbakshsingh.name
+  location              = azurerm_resource_group.citrixrg-germany.location
+  resource_group_name   = azurerm_resource_group.citrixrg-germany.name
   network_interface_ids = [azurerm_network_interface.mi-nic.id]
   vm_size               = "Standard_DS1_v2"
 
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
+ # boot_diagnostics {
+ #   enabled     = true
+ #   storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+ # }
   os_profile { # forces replacement
     admin_username = "winadmin"
+    admin_password = "P@ssw0rd*123"
     computer_name  = "Win2k19-MI"
   }
 
@@ -118,56 +123,50 @@ resource "azurerm_virtual_machine" "mi" {
 
 
 
-resource "azurerm_virtual_machine" "dc-backup" {
-  name                = "Win2k19-SF-DC02"
-  location            = azurerm_resource_group.harbakshsingh.location
-  resource_group_name = azurerm_resource_group.harbakshsingh.name
-  network_interface_ids = [
-  azurerm_network_interface.dc-backup-nic.id]
-  vm_size = "Standard_D4s_v3"
-
-
-  tags = {
-    "role1" = "storefront02"
-    "role2" = "deliverycontroller02"
-    "role3" = "director"
-    "role4" = "license-server"
-  }
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
-  os_profile {
-    admin_username = "winadmin"
-    computer_name  = "Win2k19-SF-DC02"
-  }
-
-  os_profile_windows_config {
-    enable_automatic_upgrades = true
-    provision_vm_agent        = true
-
-  }
-  storage_image_reference {
-    offer     = "WindowsServer"
-    publisher = "MicrosoftWindowsServer"
-    sku       = "2019-Datacenter"
-    version   = "latest"
-  }
-
-  storage_os_disk {
-    name              = "dc-backup"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-
-}
+#resource "azurerm_virtual_machine" "dc-backup" {
+#  name                = "Win2k19-SF-DC02"
+#  location            = azurerm_resource_group.citrixrg-ireland.location
+#  resource_group_name = azurerm_resource_group.citrixrg-ireland.name
+#  network_interface_ids = [
+#  azurerm_network_interface.dc-backup-nic.id]
+#  vm_size = "Standard_D4s_v3"
+#  tags = {
+#    "role1" = "storefront02"
+#    "role2" = "deliverycontroller02"
+#    "role3" = "director"
+#    "role4" = "license-server"
+#  }
+#  boot_diagnostics {
+#    enabled     = true
+#    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+#  }
+#  os_profile {
+#    admin_username = "winadmin"
+#    admin_password = "P@ssw0rd*123"
+#    computer_name  = "Win2k19-SF-DC02"
+#  }
+#  os_profile_windows_config {
+#    enable_automatic_upgrades = true
+#    provision_vm_agent        = true
+#  }
+#  storage_image_reference {
+#    offer     = "WindowsServer"
+#    publisher = "MicrosoftWindowsServer"
+#    sku       = "2019-Datacenter"
+#    version   = "latest"
+#  }
+#  storage_os_disk {
+#    name              = "dc-backup"
+#    caching           = "ReadWrite"3    create_option     = "FromImage"
+#    managed_disk_type = "Standard_LRS"
+#  }
+#}
 
 
 resource "azurerm_virtual_machine" "sf" {
   name                  = "WIn2k19-SF01"
-  location              = azurerm_resource_group.harbakshsingh.location
-  resource_group_name   = azurerm_resource_group.harbakshsingh.name
+  location              = azurerm_resource_group.citrixrg-ireland.location
+  resource_group_name   = azurerm_resource_group.citrixrg-ireland.name
   network_interface_ids = [azurerm_network_interface.sf-nic.id]
   vm_size               = "Standard_D4s_v3"
   storage_os_disk {
@@ -177,12 +176,13 @@ resource "azurerm_virtual_machine" "sf" {
     managed_disk_type = "Standard_LRS"
   }
 
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
+ # boot_diagnostics {
+ #   enabled     = true
+ #   storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+ # }
   os_profile {
     admin_username = "winadmin"
+    admin_password = "P@ssw0rd*123"
     computer_name  = "WIn2k19-SF01"
   }
 
@@ -200,23 +200,24 @@ resource "azurerm_virtual_machine" "sf" {
 
 resource "azurerm_virtual_machine" "domain-controller" {
   name                  = "Windows2016-AD"
-  location              = azurerm_resource_group.harbakshsingh.location
-  resource_group_name   = azurerm_resource_group.harbakshsingh.name
+  location              = azurerm_resource_group.citrixrg.location
+  resource_group_name   = azurerm_resource_group.citrixrg.name
   network_interface_ids = [azurerm_network_interface.domain-controller-nic.id]
-  vm_size               = "Standard_D2s_v3"
+  vm_size               = "Standard_D4s_v3"
   storage_os_disk {
     name              = "domain-controller-disk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-  boot_diagnostics {
-    enabled     = true
-    storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
-  }
+ # boot_diagnostics {
+ #   enabled     = true
+ #   storage_uri = "https://harbakshsinghdiag.blob.core.windows.net/"
+ # }
 
   os_profile {
     admin_username = "winadmin"
+    admin_password = "P@ssw0rd*123"
     computer_name  = "Windows2016-AD"
   }
   os_profile_windows_config {
