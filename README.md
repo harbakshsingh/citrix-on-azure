@@ -1,3 +1,22 @@
+This repo is used to deploy Windows Virtual machines for Citrix Xen app/Desktop infra  across multiple regions in Azure
+Below is summary of what is deployed:
+
+Domain controller       Win2k19         4 vcpu          16gB RAM        London (uksouth)
+Delivery Controller     Win2k19         4 vcpu          16gB RAM        Netherlands (westeurope)
+Storefront              Win2k19         4 vcpu          16gB RAM        Ireland (northeurope)
+Machine Image           Win2k19         1 vCPU          3.5gB RAM       Germany(germanywestcentral)
+Citrix ADC(Netscaler)   12.1-VPX        4 vcpu          16gb RAM        Paris 9francecentral)
+
+The backup Delivery controller machine is currently not deployed
+Additional pending work is as below;
+- Add public IPs to each machine by updating the "nic.tf"
+- Add code for vnet peering between each region to have full mesh connectivity between all machines.
+- Create a snapshot of the machine image once connected to it and verified that VDI agent and relevant apps to be published are installed
+- Update route tables for each vnet after vnet peering is built
+- Update NSG for each VM if necessary
+- Test connectiivty by pinging the VM private IPs across region
+
+
 #Confiugre git
 git config user.email harry_ieee@yahoo.co.in
 git config --global user.name harbaksh
